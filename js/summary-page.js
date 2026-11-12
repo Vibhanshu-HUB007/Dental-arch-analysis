@@ -10,13 +10,21 @@ async function initSummaryPage() {
     document.getElementById('loading-state').style.display = 'none';
     document.getElementById('summary-content').style.display = 'block';
 
+    // Render non-chart content immediately
     renderKPIs(stats, patients);
-    renderArchPieChart(stats);
-    renderScatterIC(stats);
-    renderScatterIM(stats);
-    renderMeanCompareChart(stats);
     renderStatsTable(stats);
     renderAccuracySummary(stats);
+
+    // Charts MUST render after the container is visible and browser has
+    // completed layout — two rAF calls guarantee this.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        renderArchPieChart(stats);
+        renderScatterIC(stats);
+        renderScatterIM(stats);
+        renderMeanCompareChart(stats);
+      });
+    });
 
   } catch (err) {
     document.getElementById('loading-state').innerHTML =
