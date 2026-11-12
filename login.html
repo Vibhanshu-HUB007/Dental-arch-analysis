@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — Dental Arch Analysis</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="login-page">
+
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-logo">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="24" cy="24" r="22" fill="#1a3a5c" />
+          <ellipse cx="24" cy="30" rx="13" ry="9" fill="white" opacity="0.15"/>
+          <path d="M12 22 Q16 14 24 16 Q32 14 36 22 Q34 32 28 34 Q24 36 20 34 Q14 32 12 22Z" fill="white" opacity="0.9"/>
+          <line x1="24" y1="16" x2="24" y2="34" stroke="#2a9d8f" stroke-width="1.5" opacity="0.6"/>
+        </svg>
+      </div>
+      <h1 class="login-title">Dental Arch Analysis</h1>
+      <p class="login-subtitle">AI-Assisted Orthodontic Measurement System</p>
+
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label for="password-input" class="form-label">Access Password</label>
+          <input
+            type="password"
+            id="password-input"
+            class="form-input"
+            placeholder="Enter password"
+            autocomplete="current-password"
+            required
+          />
+        </div>
+        <div id="login-error" class="login-error" role="alert" style="display:none;"></div>
+        <button type="submit" id="login-btn" class="btn btn-primary btn-full">Login</button>
+      </form>
+
+      <p class="login-footer">
+        PG Research Project &mdash; Orthodontics Department
+      </p>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    initLoginPage();
+  </script>
+</body>
+</html>

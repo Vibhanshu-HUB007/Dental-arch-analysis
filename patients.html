@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patient Models — Dental Arch Analysis</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container navbar-inner">
+      <a href="index.html" class="navbar-brand">
+        <svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="24" cy="24" r="22" fill="rgba(255,255,255,.15)"/>
+          <path d="M12 22 Q16 14 24 16 Q32 14 36 22 Q34 32 28 34 Q24 36 20 34 Q14 32 12 22Z" fill="white" opacity="0.9"/>
+          <line x1="24" y1="16" x2="24" y2="34" stroke="#2a9d8f" stroke-width="1.5" opacity="0.8"/>
+        </svg>
+        Dental Arch AI
+      </a>
+      <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.navbar-nav').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="navbar-nav" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="patients.html" class="active">Patients</a></li>
+        <li><a href="summary.html">Summary</a></li>
+        <li><button class="btn-logout" onclick="logout()">Logout</button></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="container">
+      <h1>Patient Models</h1>
+      <p>Browse and filter all 3D upper arch dental models with measurement data</p>
+    </div>
+  </div>
+
+  <main class="page-content" role="main">
+    <div class="container">
+
+      <!-- Filter Bar -->
+      <div class="filter-bar" role="toolbar" aria-label="Filter patients">
+        <button class="filter-btn active" data-shape="all" onclick="setFilter('all', this)">All</button>
+        <button class="filter-btn" data-shape="Symmetrical" onclick="setFilter('Symmetrical', this)">Symmetrical</button>
+        <button class="filter-btn" data-shape="V-Shaped" onclick="setFilter('V-Shaped', this)">V-Shaped</button>
+        <button class="filter-btn" data-shape="U-Shaped" onclick="setFilter('U-Shaped', this)">U-Shaped</button>
+        <button class="filter-btn" data-shape="Asymmetrical" onclick="setFilter('Asymmetrical', this)">Asymmetrical</button>
+        <div class="search-box">
+          <input type="search" id="search-input" placeholder="Search model ID…" aria-label="Search by model ID" oninput="applyFilters()" />
+        </div>
+      </div>
+
+      <!-- Results count -->
+      <p class="text-muted text-small mb-2" id="results-count"></p>
+
+      <!-- Patient Grid -->
+      <div class="patient-grid" id="patient-grid" role="list" aria-label="Patient models">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Empty state -->
+      <div class="empty-state" id="empty-state" style="display:none;" role="status">
+        <svg width="64" height="64" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="8" stroke="#adb5bd" stroke-width="2"/>
+          <path d="m21 21-4.35-4.35" stroke="#adb5bd" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <h3>No models found</h3>
+        <p>Try adjusting the search or filter.</p>
+      </div>
+
+      <!-- Loading state -->
+      <div class="empty-state" id="loading-state" role="status" aria-live="polite">
+        <div class="spinner" style="border-top-color:var(--teal); width:40px; height:40px; border-width:3px; border-color:var(--gray-200); border-top-color:var(--teal); border-radius:50%; animation:spin .8s linear infinite; margin:0 auto;"></div>
+        <p class="mt-2 text-muted">Loading patient data…</p>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/data-loader.js"></script>
+  <script src="js/patients-page.js"></script>
+  <script>
+    checkAuth();
+    initPatientsPage();
+  </script>
+</body>
+</html>

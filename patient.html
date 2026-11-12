@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patient Detail — Dental Arch Analysis</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container navbar-inner">
+      <a href="index.html" class="navbar-brand">
+        <svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="24" cy="24" r="22" fill="rgba(255,255,255,.15)"/>
+          <path d="M12 22 Q16 14 24 16 Q32 14 36 22 Q34 32 28 34 Q24 36 20 34 Q14 32 12 22Z" fill="white" opacity="0.9"/>
+          <line x1="24" y1="16" x2="24" y2="34" stroke="#2a9d8f" stroke-width="1.5" opacity="0.8"/>
+        </svg>
+        Dental Arch AI
+      </a>
+      <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.navbar-nav').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="navbar-nav" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="patients.html" class="active">Patients</a></li>
+        <li><a href="summary.html">Summary</a></li>
+        <li><button class="btn-logout" onclick="logout()">Logout</button></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="page-content" role="main">
+    <div class="container">
+
+      <!-- Back link -->
+      <a href="patients.html" class="back-link">← Back to Patients</a>
+
+      <!-- Patient header -->
+      <div class="patient-detail-header" id="patient-header">
+        <div class="d-flex align-center gap-1" style="flex-wrap:wrap; gap:1rem;">
+          <div class="spinner-sm"></div>
+          <span class="text-muted">Loading patient data…</span>
+        </div>
+      </div>
+
+      <!-- 3D Viewer Section -->
+      <div class="viewer-section mb-3" id="viewer-section">
+        <div class="viewer-header">
+          <span style="font-weight:600; color:var(--navy);">3D Arch Model</span>
+          <button class="btn btn-primary btn-sm" id="load-stl-btn" onclick="loadSTL()">
+            🦷 Load 3D Model
+          </button>
+        </div>
+        <div class="viewer-placeholder" id="viewer-placeholder">
+          <svg width="64" height="64" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" fill="#adb5bd"/>
+          </svg>
+          <p>Click <strong>Load 3D Model</strong> to view the interactive STL viewer.</p>
+          <p class="text-small text-muted">STL files are 10–16 MB. Loading may take a few seconds.</p>
+        </div>
+        <div id="stl-viewer-container">
+          <div id="viewer-loading">
+            <div class="spinner"></div>
+            <span id="viewer-loading-text">Loading STL…</span>
+          </div>
+        </div>
+        <div class="viewer-controls-hint" id="viewer-hint">
+          <span>Left drag: Rotate</span>
+          <span>Scroll: Zoom</span>
+          <span>Right drag: Pan</span>
+        </div>
+      </div>
+
+      <!-- Accuracy Legend -->
+      <div class="accuracy-legend mb-2">
+        <div class="legend-item"><div class="legend-dot dot-good"></div><span>Within 1mm — Excellent</span></div>
+        <div class="legend-item"><div class="legend-dot dot-warn"></div><span>1–2mm — Acceptable</span></div>
+        <div class="legend-item"><div class="legend-dot dot-bad"></div><span>&gt;2mm — Review</span></div>
+      </div>
+
+      <!-- Section 1: Overview -->
+      <div class="mb-3" id="section-overview"></div>
+
+      <!-- Section 2: Arch Widths Table -->
+      <div class="mb-3" id="section-widths"></div>
+
+      <!-- Section 3: Tooth Widths Table -->
+      <div class="mb-3" id="section-teeth"></div>
+
+      <!-- Section 4: Indices Table -->
+      <div class="mb-3" id="section-indices"></div>
+
+      <!-- Charts -->
+      <h2 class="mb-2" style="color:var(--navy);">Measurement Charts</h2>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-card-header">Arch Widths — Manual vs AI vs Calculated</div>
+          <div class="chart-body"><canvas id="chart-widths" role="img" aria-label="Arch widths comparison chart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-header">Indices — Manual vs AI vs Calculated</div>
+          <div class="chart-body"><canvas id="chart-indices" role="img" aria-label="Indices comparison chart"></canvas></div>
+        </div>
+      </div>
+      <div class="chart-card mb-3">
+        <div class="chart-card-header">Individual Tooth Widths — Manual vs AI (Mesiodistal, mm)</div>
+        <div class="chart-body-lg"><canvas id="chart-teeth" role="img" aria-label="Individual tooth widths chart"></canvas></div>
+      </div>
+
+      <!-- Print button -->
+      <div class="text-right mt-2">
+        <button class="btn btn-outline btn-sm" onclick="window.print()">🖨 Print / Export</button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Three.js and Chart.js loaded lazily or eagerly below -->
+  <script src="https://unpkg.com/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/data-loader.js"></script>
+  <script src="js/patient-detail.js"></script>
+  <script>
+    checkAuth();
+    initPatientDetailPage();
+  </script>
+</body>
+</html>

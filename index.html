@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dental Arch Analysis Using AI</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container navbar-inner">
+      <a href="index.html" class="navbar-brand">
+        <svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="24" cy="24" r="22" fill="rgba(255,255,255,.15)"/>
+          <path d="M12 22 Q16 14 24 16 Q32 14 36 22 Q34 32 28 34 Q24 36 20 34 Q14 32 12 22Z" fill="white" opacity="0.9"/>
+          <line x1="24" y1="16" x2="24" y2="34" stroke="#2a9d8f" stroke-width="1.5" opacity="0.8"/>
+        </svg>
+        Dental Arch AI
+      </a>
+      <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.navbar-nav').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="navbar-nav" role="list">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="patients.html">Patients</a></li>
+        <li><a href="summary.html">Summary</a></li>
+        <li><button class="btn-logout" onclick="logout()">Logout</button></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" role="banner">
+    <div class="container">
+      <h1>Dental Arch Analysis Using AI</h1>
+      <p class="subtitle">
+        Automated orthodontic measurements on 3D digital dental models using
+        artificial intelligence — validated against manual measurements
+      </p>
+      <div class="d-flex gap-2" style="justify-content:center; flex-wrap:wrap;">
+        <a href="patients.html" class="btn btn-primary btn-lg">View Patient Models</a>
+        <a href="summary.html" class="btn btn-outline btn-lg" style="color:white; border-color:rgba(255,255,255,.5);">View Statistics</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Bar -->
+  <section aria-label="Dataset statistics">
+    <div class="container">
+      <div class="stats-bar" id="stats-bar">
+        <div class="stat-item">
+          <div class="stat-number" id="stat-models">37</div>
+          <div class="stat-label">3D Models Analyzed</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">4</div>
+          <div class="stat-label">Arch Shape Categories</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">5</div>
+          <div class="stat-label">Measurement Indices</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="stat-accuracy">—</div>
+          <div class="stat-label">AI Accuracy (% within 1mm)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Methodology -->
+  <section class="methodology" aria-labelledby="method-heading">
+    <div class="container">
+      <h2 id="method-heading" class="text-center mb-3" style="color:var(--navy);">Research Methodology</h2>
+      <p class="text-center text-muted mb-3">
+        This study evaluates the accuracy of AI-based automated measurements on
+        3D digital upper arch models compared to gold-standard manual measurements.
+      </p>
+
+      <div class="method-grid">
+        <div class="method-card">
+          <div class="method-icon">🦷</div>
+          <h3>3D Digital Models</h3>
+          <p>Upper arch dental models obtained via intraoral scanning and exported as STL files for digital analysis.</p>
+        </div>
+        <div class="method-card">
+          <div class="method-icon">🤖</div>
+          <h3>AI Landmark Detection</h3>
+          <p>Deep learning model automatically identifies individual tooth landmarks and measures mesiodistal widths from STL geometry.</p>
+        </div>
+        <div class="method-card">
+          <div class="method-icon">📐</div>
+          <h3>Arch Measurements</h3>
+          <p>Inter-canine width, inter-molar width, and arch shape classification are computed from AI-detected landmarks.</p>
+        </div>
+        <div class="method-card">
+          <div class="method-icon">📊</div>
+          <h3>Index Calculations</h3>
+          <p>Pont's Index, Crowding Index, Ashley &amp; Huse Index, and Incisor Height Index derived from AI measurements.</p>
+        </div>
+        <div class="method-card">
+          <div class="method-icon">✅</div>
+          <h3>Manual Validation</h3>
+          <p>All AI measurements validated against manual measurements by an experienced orthodontist using digital calipers.</p>
+        </div>
+        <div class="method-card">
+          <div class="method-icon">📈</div>
+          <h3>Statistical Analysis</h3>
+          <p>Mean absolute deviation, intraclass correlation, and Bland–Altman analysis assess agreement between methods.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Indices Reference -->
+  <section style="background:var(--white); padding:2.5rem 0; border-top:1px solid var(--gray-200);" aria-labelledby="indices-heading">
+    <div class="container">
+      <h2 id="indices-heading" class="mb-3" style="color:var(--navy);">Measurement Indices Used</h2>
+      <div class="table-wrapper">
+        <table aria-label="Measurement indices reference">
+          <thead>
+            <tr>
+              <th>Index</th>
+              <th>Formula</th>
+              <th>Clinical Significance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Pont's Index</strong></td>
+              <td>Sum of 4 upper incisors / arch width × 100</td>
+              <td>Predicts required arch width for alignment</td>
+            </tr>
+            <tr>
+              <td><strong>Crowding Index</strong></td>
+              <td>Arch length required − Arch length available</td>
+              <td>Quantifies degree of dental crowding (mm)</td>
+            </tr>
+            <tr>
+              <td><strong>Ashley &amp; Huse Index</strong></td>
+              <td>Canine fossa width × 100 / TM</td>
+              <td>Arch depth to width ratio assessment</td>
+            </tr>
+            <tr>
+              <td><strong>Incisor Height Index</strong></td>
+              <td>Incisor height / inter-canine width × 100</td>
+              <td>Vertical-horizontal proportion of anterior teeth</td>
+            </tr>
+            <tr>
+              <td><strong>Tanaka &amp; Johnston</strong></td>
+              <td>½ mandibular incisor width + 10.5 (canine) / 11.0 (premolar)</td>
+              <td>Mixed dentition analysis for space prediction</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Footer -->
+  <section style="padding:3rem 0; text-align:center;" aria-label="Call to action">
+    <div class="container">
+      <h2 style="color:var(--navy); margin-bottom:0.75rem;">Explore the Dataset</h2>
+      <p class="text-muted mb-3">Browse all 37 patient models with full measurements, 3D STL viewer, and AI vs manual comparison charts.</p>
+      <a href="patients.html" class="btn btn-primary btn-lg">Browse All Patients →</a>
+    </div>
+  </section>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/data-loader.js"></script>
+  <script>
+    // Guard — redirect to login if not authenticated
+    checkAuth();
+
+    // Populate dynamic stats
+    (async () => {
+      try {
+        const stats = await getStats();
+        document.getElementById('stat-models').textContent = stats.total;
+
+        // Best accuracy across key measurements
+        const pcts = [
+          stats.measurements.inter_canine.pct1mm,
+          stats.measurements.inter_molar.pct1mm,
+          stats.measurements.ponts_index.pct1mm
+        ].filter(v => v != null);
+        if (pcts.length) {
+          const avg = (pcts.reduce((a, b) => a + b, 0) / pcts.length).toFixed(0);
+          document.getElementById('stat-accuracy').textContent = avg + '%';
+        }
+      } catch (e) {
+        // non-critical, stats bar already has static fallbacks
+      }
+    })();
+  </script>
+</body>
+</html>

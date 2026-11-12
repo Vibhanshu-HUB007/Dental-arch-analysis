@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Summary Statistics — Dental Arch Analysis</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container navbar-inner">
+      <a href="index.html" class="navbar-brand">
+        <svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="24" cy="24" r="22" fill="rgba(255,255,255,.15)"/>
+          <path d="M12 22 Q16 14 24 16 Q32 14 36 22 Q34 32 28 34 Q24 36 20 34 Q14 32 12 22Z" fill="white" opacity="0.9"/>
+          <line x1="24" y1="16" x2="24" y2="34" stroke="#2a9d8f" stroke-width="1.5" opacity="0.8"/>
+        </svg>
+        Dental Arch AI
+      </a>
+      <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.navbar-nav').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="navbar-nav" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="patients.html">Patients</a></li>
+        <li><a href="summary.html" class="active">Summary</a></li>
+        <li><button class="btn-logout" onclick="logout()">Logout</button></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="container">
+      <h1>Summary Statistics</h1>
+      <p>Aggregate analysis across all patient models — AI accuracy vs manual measurements</p>
+    </div>
+  </div>
+
+  <main class="page-content" role="main">
+    <div class="container">
+
+      <!-- Loading -->
+      <div id="loading-state" class="empty-state" role="status" aria-live="polite">
+        <div class="spinner" style="border-color:var(--gray-200); border-top-color:var(--teal); width:40px; height:40px; border-width:3px; border-radius:50%; animation:spin .8s linear infinite; margin:0 auto;"></div>
+        <p class="mt-2 text-muted">Computing statistics…</p>
+      </div>
+
+      <!-- Content (hidden until loaded) -->
+      <div id="summary-content" style="display:none;">
+
+        <!-- Top KPI stats -->
+        <div class="summary-stat-grid mb-3" id="kpi-grid"></div>
+
+        <!-- Row 1: Arch distribution + Scatter inter-canine -->
+        <div class="charts-grid mb-3">
+          <div class="chart-card">
+            <div class="chart-card-header">Arch Shape Distribution</div>
+            <div class="chart-body" style="display:flex; align-items:center; justify-content:center;">
+              <canvas id="chart-pie" role="img" aria-label="Arch shape distribution pie chart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-card-header">Manual vs AI — Inter-Canine Width (all patients)</div>
+            <div class="chart-body">
+              <canvas id="chart-scatter-ic" role="img" aria-label="Scatter plot inter-canine width manual vs AI"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: Scatter inter-molar + Grouped mean comparison -->
+        <div class="charts-grid mb-3">
+          <div class="chart-card">
+            <div class="chart-card-header">Manual vs AI — Inter-Molar Width (all patients)</div>
+            <div class="chart-body">
+              <canvas id="chart-scatter-im" role="img" aria-label="Scatter plot inter-molar width manual vs AI"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-card-header">Mean Values — Manual vs AI (key measurements)</div>
+            <div class="chart-body">
+              <canvas id="chart-mean-compare" role="img" aria-label="Mean values comparison chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mean ± SD Table -->
+        <div class="mb-3">
+          <div class="section-title">Mean ± SD Comparison — Manual vs AI</div>
+          <div class="table-wrapper">
+            <table aria-label="Mean and standard deviation comparison table">
+              <thead>
+                <tr>
+                  <th>Measurement</th>
+                  <th>Manual — Mean ± SD</th>
+                  <th>AI — Mean ± SD</th>
+                  <th>Mean Abs. Deviation</th>
+                  <th>% Within 1mm</th>
+                  <th>% Within 2mm</th>
+                </tr>
+              </thead>
+              <tbody id="stats-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Accuracy Summary -->
+        <div class="mb-3">
+          <div class="section-title">AI Accuracy Summary</div>
+          <div class="card">
+            <div class="card-body" id="accuracy-summary"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script src="https://unpkg.com/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/data-loader.js"></script>
+  <script src="js/summary-page.js"></script>
+  <script>
+    checkAuth();
+    initSummaryPage();
+  </script>
+</body>
+</html>

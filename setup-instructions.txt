@@ -1,0 +1,159 @@
+====================================================================
+  DENTAL ARCH ANALYSIS — SETUP INSTRUCTIONS
+  GitHub Pages Deployment Guide
+====================================================================
+
+DEFAULT PASSWORD: web@123
+
+
+STEP 1 — Copy the STL Dataset into the website folder
+------------------------------------------------------
+The STL files must be inside the website/ folder for GitHub Pages.
+
+Option A (Recommended): Copy the Dataset/ folder
+  cp -r "/home/vibhanshu92/Desktop/PG app/Dataset/" "/home/vibhanshu92/Desktop/PG app/website/Dataset/"
+
+Option B: Create a symbolic link (local testing only, won't work on GitHub)
+  ln -s "../Dataset" "/home/vibhanshu92/Desktop/PG app/website/Dataset"
+
+After copying, your structure should be:
+  website/
+  └── Dataset/
+      ├── AnyConv.com__3FPBITVG_upper.stl
+      ├── AnyConv.com__37O91POP_upper.stl
+      └── ... (all 37 STL files)
+
+
+STEP 2 — Initialize a Git repository
+--------------------------------------
+  cd "/home/vibhanshu92/Desktop/PG app/website"
+  git init
+  git add .
+  git commit -m "Initial commit: Dental Arch Analysis website"
+
+
+STEP 3 — Create a GitHub repository and push
+----------------------------------------------
+1. Go to https://github.com/new
+2. Create a new repository (e.g., "dental-arch-analysis")
+   - Set it to PUBLIC (required for free GitHub Pages)
+   - Do NOT initialize with README (we already have one)
+3. Push your local repo:
+   git remote add origin https://github.com/YOUR_USERNAME/dental-arch-analysis.git
+   git branch -M main
+   git push -u origin main
+
+
+STEP 4 — Enable GitHub Pages
+------------------------------
+1. Go to your GitHub repository
+2. Click "Settings" tab
+3. Click "Pages" in the left sidebar
+4. Under "Source", select:
+   - Branch: main
+   - Folder: / (root)
+5. Click "Save"
+6. Wait 1–3 minutes, then visit:
+   https://YOUR_USERNAME.github.io/dental-arch-analysis/
+
+The site will show login.html automatically.
+
+
+STEP 5 — Change the Password (IMPORTANT)
+------------------------------------------
+The default password is "dental2024". Change it before sharing:
+
+1. Open hash-generator.html in your browser:
+   - Double-click website/hash-generator.html
+   - Or navigate to: https://YOUR_USERNAME.github.io/dental-arch-analysis/hash-generator.html
+
+2. Enter your new password, click "Generate Hash"
+
+3. Copy the generated hash
+
+4. Open website/js/config.js in a text editor
+   Find this line:
+     PASSWORD_HASH: 'e8732b0c4026bdf4214714ebc17c33480d1e5da9d59c5c44d106da8e8c0f9f70',
+   Replace the hash value with your new hash.
+
+5. Save config.js and push to GitHub:
+   git add js/config.js
+   git commit -m "Update site password"
+   git push
+
+
+STEP 6 — Update Data (Optional)
+---------------------------------
+To correct or add patient measurements:
+
+1. Open website/data/patients.json in any text editor
+2. Find the patient by model_id (e.g., "3FPBITVG")
+3. Edit the values
+4. Save, then push:
+   git add data/patients.json
+   git commit -m "Update patient measurements"
+   git push
+
+Data format reference (per patient):
+  {
+    "model_id": "3FPBITVG",
+    "stl_filename": "AnyConv.com__3FPBITVG_upper.stl",
+    "teeth_present": [11, 12, 13, ...],
+    "total_arch_material": { "manual": 96, "ai": 95.4 },
+    "arch_shape": "Symmetrical",
+    "inter_canine_width": { "manual": 31, "ai": 30.6, "calculated": 30.8 },
+    "inter_molar_width":  { "manual": 50, "ai": 50.6, "calculated": 50.2 },
+    "tooth_widths": {
+      "t11": { "manual": 8.5, "ai": 8.4 },
+      ...
+    },
+    "ponts_index":          { "manual": 38.2, "ai": 37.9, "calculated": 38.0 },
+    "crowding_index":       { "manual": 2.1,  "ai": 2.3,  "calculated": 2.2  },
+    "ashley_huse_index":    { "manual": 39.5, "ai": 39.1, "calculated": 39.3 },
+    "incisor_height_index": { "manual": 44.2, "ai": 43.9 },
+    "tanaka_johnston":      { "manual": 20.8, "ai": 20.6 }
+  }
+
+
+NOTES ON GITHUB PAGES
+------------------------
+- GitHub Pages serves static files only. No server-side code.
+- The password protection is client-side (SHA-256 hash). It prevents
+  casual access but is not cryptographically secure against determined users.
+  This is appropriate for academic demo/showcase purposes.
+- File size limit: 100 MB per file, 1 GB total repo.
+  Your STL files (~10–16 MB each) are within limits.
+- After pushing large STL files, GitHub may take a few minutes to process.
+- If the site doesn't update after a push, do a hard refresh (Ctrl+Shift+R).
+
+
+TROUBLESHOOTING
+-----------------
+Problem: Login works but data doesn't load
+  → Make sure you are serving via a web server, not file://
+  → GitHub Pages serves via HTTP, so this will work there.
+  → For local testing: use VS Code Live Server, or run:
+     python3 -m http.server 8000
+     Then visit: http://localhost:8000/
+
+Problem: 3D STL model doesn't load
+  → Check that Dataset/ folder exists inside website/
+  → Check that STL filename matches exactly: AnyConv.com__[MODELID]_upper.stl
+  → Open browser DevTools (F12) → Console for error details
+
+Problem: GitHub Pages shows 404
+  → Ensure Pages is enabled in repo Settings → Pages
+  → Ensure the source branch is "main" and folder is "/"
+  → Wait 2–5 minutes after enabling, then try again
+
+
+SITE STRUCTURE SUMMARY
+------------------------
+  login.html          → Entry point (public)
+  index.html          → Home page (requires login)
+  patients.html       → Patient list with filters (requires login)
+  patient.html?id=ID  → Patient detail + 3D viewer + charts (requires login)
+  summary.html        → Statistics across all patients (requires login)
+  hash-generator.html → Password hash tool (standalone, no login needed)
+
+====================================================================

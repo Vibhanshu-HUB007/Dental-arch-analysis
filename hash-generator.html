@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Password Hash Generator — Dental Arch Analysis</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #1a3a5c 0%, #274e78 60%, #1f7a6e 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 2.5rem;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0,0,0,.2);
+    }
+    h1 { font-size: 1.4rem; color: #1a3a5c; margin-bottom: 0.5rem; }
+    p  { color: #6c757d; font-size: 0.9rem; margin-bottom: 1.5rem; }
+    label { display: block; font-size: 0.85rem; font-weight: 600; color: #1a3a5c; margin-bottom: 0.4rem; }
+    input[type="password"], input[type="text"] {
+      width: 100%;
+      padding: 0.65rem 1rem;
+      border: 1.5px solid #dee2e6;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+      margin-bottom: 1rem;
+      transition: border-color .2s;
+    }
+    input:focus { border-color: #2a9d8f; box-shadow: 0 0 0 3px rgba(42,157,143,.15); }
+    button {
+      width: 100%;
+      padding: 0.65rem;
+      background: #2a9d8f;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    button:hover { background: #1f7a6e; }
+    .result-box {
+      margin-top: 1.5rem;
+      display: none;
+    }
+    .result-label { font-size: 0.85rem; font-weight: 600; color: #1a3a5c; margin-bottom: 0.4rem; }
+    .hash-display {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem;
+      word-break: break-all;
+      color: #343a40;
+      margin-bottom: 0.75rem;
+    }
+    .copy-btn {
+      background: #1a3a5c;
+      font-size: 0.85rem;
+      padding: 0.4rem;
+      margin-bottom: 1rem;
+    }
+    .copy-btn:hover { background: #122840; }
+    .instruction {
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+      color: #155724;
+      line-height: 1.6;
+    }
+    .instruction code {
+      background: rgba(0,0,0,.08);
+      padding: 0.1em 0.3em;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+    }
+    .toggle-pw {
+      background: none;
+      border: none;
+      color: #2a9d8f;
+      font-size: 0.82rem;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 0.5rem;
+      width: auto;
+    }
+    .toggle-pw:hover { background: none; color: #1f7a6e; text-decoration: underline; }
+    .copied-msg { color: #28a745; font-size: 0.82rem; margin-left: 0.5rem; display: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🔑 Password Hash Generator</h1>
+    <p>Use this tool to generate a new SHA-256 password hash for your site. No data is sent anywhere — all hashing happens in your browser.</p>
+
+    <label for="new-password">New Password</label>
+    <input type="password" id="new-password" placeholder="Enter your new password" autocomplete="new-password" />
+    <button type="button" class="toggle-pw" onclick="toggleVisibility()">👁 Show/Hide Password</button>
+
+    <label for="confirm-password">Confirm Password</label>
+    <input type="password" id="confirm-password" placeholder="Re-enter password" autocomplete="new-password" />
+
+    <button onclick="generateHash()">Generate Hash</button>
+
+    <div id="error-msg" style="color:#dc3545; font-size:.85rem; margin-top:.75rem; display:none;"></div>
+
+    <div class="result-box" id="result-box">
+      <div class="result-label">SHA-256 Hash (copy this):</div>
+      <div class="hash-display" id="hash-output"></div>
+      <button class="copy-btn" onclick="copyHash()">📋 Copy Hash <span class="copied-msg" id="copied-msg">Copied!</span></button>
+      <div class="instruction">
+        <strong>Next step:</strong><br>
+        1. Open <code>js/config.js</code> in a text editor<br>
+        2. Find the line: <code>PASSWORD_HASH: '...'</code><br>
+        3. Replace the value inside the quotes with the hash above<br>
+        4. Save the file and redeploy to GitHub Pages
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function generateHash() {
+      const pw1 = document.getElementById('new-password').value;
+      const pw2 = document.getElementById('confirm-password').value;
+      const errEl = document.getElementById('error-msg');
+
+      errEl.style.display = 'none';
+
+      if (!pw1) {
+        errEl.textContent = 'Please enter a password.';
+        errEl.style.display = 'block';
+        return;
+      }
+      if (pw1 !== pw2) {
+        errEl.textContent = 'Passwords do not match.';
+        errEl.style.display = 'block';
+        return;
+      }
+      if (pw1.length < 6) {
+        errEl.textContent = 'Password must be at least 6 characters.';
+        errEl.style.display = 'block';
+        return;
+      }
+
+      try {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(pw1);
+        const hashBuf = await crypto.subtle.digest('SHA-256', data);
+        const hashArr = Array.from(new Uint8Array(hashBuf));
+        const hash = hashArr.map(b => b.toString(16).padStart(2, '0')).join('');
+
+        document.getElementById('hash-output').textContent = hash;
+        document.getElementById('result-box').style.display = 'block';
+        document.getElementById('copied-msg').style.display = 'none';
+      } catch (e) {
+        errEl.textContent = 'Error generating hash. Please try again.';
+        errEl.style.display = 'block';
+      }
+    }
+
+    function copyHash() {
+      const hash = document.getElementById('hash-output').textContent;
+      navigator.clipboard.writeText(hash).then(() => {
+        const msg = document.getElementById('copied-msg');
+        msg.style.display = 'inline';
+        setTimeout(() => { msg.style.display = 'none'; }, 2000);
+      });
+    }
+
+    function toggleVisibility() {
+      const pw1 = document.getElementById('new-password');
+      const pw2 = document.getElementById('confirm-password');
+      const type = pw1.type === 'password' ? 'text' : 'password';
+      pw1.type = pw2.type = type;
+    }
+
+    // Allow Enter key
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') generateHash();
+    });
+  </script>
+</body>
+</html>
