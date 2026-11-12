@@ -38,7 +38,6 @@ async function initPatientDetailPage() {
   renderWidthsSection(_patient);
   renderTeethSection(_patient);
   renderIndicesSection(_patient);
-  renderCharts(_patient);
 }
 
 /* ============================================================
@@ -263,99 +262,6 @@ function renderIndicesSection(p) {
       </table>
     </div>
   `;
-}
-
-/* ============================================================
-   Charts
-   ============================================================ */
-function renderCharts(p) {
-  const NAVY   = '#1a3a5c';
-  const TEAL   = '#2a9d8f';
-  const AMBER  = '#e9a825';
-
-  const defaults = {
-    plugins: { legend: { labels: { font: { size: 11 }, boxWidth: 14 } } },
-    scales: {
-      x: { grid: { display: false }, ticks: { font: { size: 10 } } },
-      y: { grid: { color: '#e9ecef' }, ticks: { font: { size: 10 } } }
-    }
-  };
-
-  // Chart 1: Arch Widths
-  const ic = p.inter_canine_width || {};
-  const im = p.inter_molar_width  || {};
-  new Chart(document.getElementById('chart-widths'), {
-    type: 'bar',
-    data: {
-      labels: ['Inter-Canine Width', 'Inter-Molar Width'],
-      datasets: [
-        { label: 'Manual',     data: [ic.manual, im.manual],     backgroundColor: NAVY,   borderRadius: 4 },
-        { label: 'AI',         data: [ic.ai,     im.ai],         backgroundColor: TEAL,   borderRadius: 4 },
-        { label: 'Calculated', data: [ic.calculated, im.calculated], backgroundColor: AMBER, borderRadius: 4 }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      ...defaults,
-      plugins: {
-        ...defaults.plugins,
-        tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y?.toFixed(1)} mm` } }
-      },
-      scales: { ...defaults.scales, y: { ...defaults.scales.y, title: { display: true, text: 'mm', font: { size: 10 } } } }
-    }
-  });
-
-  // Chart 2: Indices
-  const pi = p.ponts_index          || {};
-  const ci = p.crowding_index       || {};
-  const ah = p.ashley_huse_index    || {};
-  new Chart(document.getElementById('chart-indices'), {
-    type: 'bar',
-    data: {
-      labels: ["Pont's Index", 'Crowding Index', 'Ashley & Huse'],
-      datasets: [
-        { label: 'Manual',     data: [pi.manual, ci.manual, ah.manual],     backgroundColor: NAVY,  borderRadius: 4 },
-        { label: 'AI',         data: [pi.ai,     ci.ai,     ah.ai],         backgroundColor: TEAL,  borderRadius: 4 },
-        { label: 'Calculated', data: [pi.calculated, ci.calculated, ah.calculated], backgroundColor: AMBER, borderRadius: 4 }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      ...defaults
-    }
-  });
-
-  // Chart 3: Individual Tooth Widths
-  const tw = p.tooth_widths || {};
-  const sortedKeys = Object.keys(tw).sort((a, b) => parseInt(a.replace('t','')) - parseInt(b.replace('t','')));
-  const toothLabels  = sortedKeys.map(k => k.replace('t',''));
-  const manualWidths = sortedKeys.map(k => tw[k]?.manual ?? null);
-  const aiWidths     = sortedKeys.map(k => tw[k]?.ai     ?? null);
-
-  new Chart(document.getElementById('chart-teeth'), {
-    type: 'bar',
-    data: {
-      labels: toothLabels,
-      datasets: [
-        { label: 'Manual', data: manualWidths, backgroundColor: NAVY, borderRadius: 3 },
-        { label: 'AI',     data: aiWidths,     backgroundColor: TEAL, borderRadius: 3 }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { labels: { font: { size: 11 }, boxWidth: 14 } },
-        tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y?.toFixed(1)} mm` } }
-      },
-      scales: {
-        x: { grid: { display: false }, ticks: { font: { size: 9 } }, title: { display: true, text: 'Tooth Number', font: { size: 10 } } },
-        y: { grid: { color: '#e9ecef' }, ticks: { font: { size: 10 } }, title: { display: true, text: 'Width (mm)', font: { size: 10 } }, min: 4 }
-      }
-    }
-  });
 }
 
 /* ============================================================
